@@ -1,0 +1,17 @@
+.prompt-input-wrapper {
+    width: full;
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+
+}
+
+.prompt-input-wrapper>input {
+    width: 60%;
+    height: 50px;
+    border-radius: 10px;
+    border: lightgray 1px solid;
+    padding: 5px;
+    background-color: #F1F4F7;
+    border: none;
+}

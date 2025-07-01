@@ -1,0 +1,16 @@
+.main-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 20px;
+}
+
+.rounded-section {
+  background-color: white;
+  border-radius: 20px;
+  padding: 30px;
+  /* display: flex; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  width: 100%;
+}
