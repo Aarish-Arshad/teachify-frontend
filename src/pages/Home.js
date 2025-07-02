@@ -2,7 +2,13 @@ import "../styles/Home.css";
 import Navbar from "../components/Navbar";
 import Section from "../components/Section";
 import { Layout, Button } from "antd";
-import dummy from "../assets/dummy-image.jpeg";
+// import dummy from "../assets/dummy-image.jpeg";
+import h1 from "../assets/h1.png";
+import h2 from "../assets/h2.png";
+import h3 from "../assets/h3.png";
+import h4 from "../assets/h4.png";
+// import h5 from "../assets/h5.png";
+// import h6 from "../assets/h6.png";
 import WCU from "../assets/wcu.png";
 import testimonials from "../assets/testimonials.png";
 import { useNavigate } from 'react-router-dom';
@@ -49,15 +55,15 @@ function Home() {
 
             <div className="grid-container">
               <section className="grid-section">
-                <img src={dummy} className="section-image" alt="Dummy Image" />
+                <img src={h1} className="section-image" alt="Dummy Image" />
               </section>
 
               <section className="grid-section">
-                <img src={dummy} className="section-image" alt="Dummy Image" />
+                <img src={h2} className="section-image" alt="Dummy Image" />
               </section>
 
               <section className="grid-section">
-                <img src={dummy} className="section-image" alt="Dummy Image" />
+                <img src={h3} className="section-image" alt="Dummy Image" />
               </section>
             </div>
           </Section>
@@ -79,7 +85,7 @@ function Home() {
                       {item.buttonText}
                     </Button>
                   </div>
-                  <img src={dummy} className="feature-image"></img>
+                  <img src={h4} className="feature-image"></img>
                 </div>
               ))}
             </div>
