@@ -1,33 +1,43 @@
-
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 import '../styles/Dashboard.css';
 
-const SearchIcon = () => (
+export default function DashboardHeader() {
+  const [username, setUsername] = useState('');
 
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        console.warn('No auth token found; default username');
+        setUsername('Teacher');
 
-  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-    <circle cx="11" cy="11" r="8"></circle>
-    <path d="m21 21-4.35-4.35"></path>
-  </svg>
-);
+        return;
+      }
+      try {
+        const resp = await axios.get('http://127.0.0.1:8000/api/profile/', {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Token ${token}`
+          }
+        });
 
+        console.log('Profile API response:', resp.data); // check what comes exactly
 
-const DashboardHeader = () => {
+        // Check if resp.data has username, else fallback to name
+        setUsername(resp.data.username || resp.data.name || 'Teacher');
+      } catch (err) {
+        console.error('Failed to fetch profile:', err);
+        setUsername('Teacher'); // fallback
+      }
+    };
+
+    fetchProfile();
+  }, []);
+
   return (
     <div className="dashboard-header">
-      <h1 className="dashboard-title">Welcome Back, Sami!</h1>
-      <div className="search-container">
-        <div className="search-icon">
-          <SearchIcon />
-        </div>
-        <input
-          type="text"
-          placeholder="Search lectures, quizzes, or resources..."
-          className="search-input"
-        />
-      </div>
+      <h1 className="dashboard-title">Welcome Back, Teacher!</h1>
     </div>
   );
-};
-
-export default DashboardHeader;
+}

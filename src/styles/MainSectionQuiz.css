@@ -140,3 +140,36 @@
   font-weight: bold;
   text-align: center;
 }
+
+
+.mcq-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.mcq-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 14px 18px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+}
+
+.mcq-question {
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+
+.mcq-options {
+  list-style: disc inside;
+  margin: 0 0 8px;
+  padding-left: 18px;
+  color: #333;
+}
+
+.mcq-answer {
+  color: #007B55;  /* greenish tone */
+  font-size: 0.95rem;
+}

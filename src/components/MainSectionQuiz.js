@@ -8,9 +8,10 @@ export default function MainSection() {
   const [fileName, setFileName] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [prompt, setPrompt] = useState('');
-  const [taskType, setTaskType] = useState('quiz');   // ✅ this is important
+  const [taskType, setTaskType] = useState('quiz');
   const [response, setResponse] = useState(null);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleUpload = async () => {
     if (!selectedFile) {
@@ -18,6 +19,7 @@ export default function MainSection() {
       return;
     }
 
+    setLoading(true);  // start loading
     try {
       const token = localStorage.getItem('authToken');
       const headers = {
@@ -32,7 +34,7 @@ export default function MainSection() {
 
       console.log('Sending request...');
       const resp = await axios.post(
-        'http://localhost:8000/api/upload/',   // ✅ backend API
+        'http://localhost:8000/api/upload/',
         formData,
         { headers }
       );
@@ -40,10 +42,11 @@ export default function MainSection() {
       console.log('Upload response:', resp.data);
       setResponse(resp.data);
       setError('');
-
     } catch (err) {
       console.error('Upload failed:', err);
       setError('Upload failed. Please check console.');
+    } finally {
+      setLoading(false);  // stop loading
     }
   };
 
@@ -55,8 +58,7 @@ export default function MainSection() {
           <p>AI-powered MCQs, fill-in-the-blanks and more — tailored to your topics</p>
         </div>
 
-        {/* Use Antd styled FileUploader */}
-        <FileUploader 
+        <FileUploader
           fileName={fileName}
           setFileName={setFileName}
           setSelectedFile={setSelectedFile}
@@ -69,37 +71,44 @@ export default function MainSection() {
 
         <div className="quiz-controls">
           <div className="selects">
-            <select 
+            <select
               className="dropdown"
               value={taskType}
               onChange={(e) => setTaskType(e.target.value)}
             >
-              <option value="quiz">Quiz</option>
+              <option value="quiz">MCQs</option>
               <option value="fill_in_blanks">Fill in the Blanks</option>
-              {/* <option value="assignment">Assignment</option> */}
             </select>
           </div>
-          <button className="generate-btn" onClick={handleUpload}>Generate Now</button>
+          <button
+            className="generate-btn"
+            onClick={handleUpload}
+            disabled={loading}   // disable while loading
+          >
+            {loading ? 'Generating...' : 'Generate Now'}
+          </button>
         </div>
 
-        {/* Render result nicely */}
         {response && (
           <div className="response">
             <h3>Generated Content:</h3>
 
             {taskType === 'quiz' && response.generated_content?.mcqs?.length > 0 && (
-              <div>
+              <div className="mcq-list">
                 {response.generated_content.mcqs.map((mcq, index) => (
-                  <div key={index} style={{ marginBottom: '10px' }}>
-                    <strong>Q{index + 1}: {mcq.question}</strong>
-                    <br />
-                    Options: {mcq.options.join(', ')}
-                    <br />
-                    Correct Answer: {mcq.correct_answer}
+                  <div key={index} className="mcq-card">
+                    <div className="mcq-question">Q{index + 1}: {mcq.question}</div>
+                    <ul className="mcq-options">
+                      {mcq.options.map((opt, i) => (
+                        <li key={i}>{opt}</li>
+                      ))}
+                    </ul>
+                    <div className="mcq-answer">✅ Correct Answer: <strong>{mcq.correct_answer}</strong></div>
                   </div>
                 ))}
               </div>
             )}
+
 
             {taskType === 'fill_in_blanks' && response.generated_content?.fill_in_blanks?.length > 0 && (
               <div>
@@ -112,12 +121,6 @@ export default function MainSection() {
                 ))}
               </div>
             )}
-
-            {/* {taskType === 'assignment' && response.generated_content && (
-              <div>
-                <p>{response.generated_content}</p>
-              </div>
-            )} */}
           </div>
         )}
 

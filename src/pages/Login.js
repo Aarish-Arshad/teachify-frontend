@@ -1,88 +1,10 @@
-// import React from 'react';
-// import { useNavigate } from 'react-router-dom';
-// import '../styles/Login.css';
-// import { Carousel, Button } from 'antd';
-// // import Teacher1 from '../assets/Teacher1.png';
-// // import Teacher2 from '../assets/Teacher2.jpg';
-// // import Teacher3 from '../assets/Teacher3.jpeg';
-// import Teacher7 from '../assets/Teacher7.png';
-// import Teacher5 from '../assets/Teacher5.png';
-// import Teacher6 from '../assets/Teacher6.png';
-// import Logo from '../assets/logo.png';
-
-// function Login() {
-//   const navigate = useNavigate();
-
-//   const handleSignupClick = () => {
-//     navigate('/signup');
-//   };
-
-//   return (
-//     <div className="signup-container">
-//       <div className="signup-left">
-//         <Carousel autoplay effect="fade" className="signup-carousel">
-//           {/* <div>
-//             <img src={Teacher1} alt="Teacher 1" className="signup-image" />
-//           </div>
-//           <div>
-//             <img src={Teacher2} alt="Teacher 2" className="signup-image" />
-//           </div>
-//           <div>
-//             <img src={Teacher3} alt="Teacher 3" className="signup-image" />
-//           </div> */}
-//           <div>
-//             <img src={Teacher7} alt="Teacher 7" className="signup-image" />
-//           </div>
-//           <div>
-//             <img src={Teacher5} alt="Teacher 5" className="signup-image" />
-//           </div>
-//           <div>
-//             <img src={Teacher6} alt="Teacher 6" className="signup-image" />
-//           </div>
-//         </Carousel>
-//       </div>
-
-//       <div className="signup-right">
-//         <div className="form-wrapper">
-//           <img src={Logo} alt="Teachify Logo" className="logo" />
-//           <h1>Welcome Back, Teacher!</h1>
-//           <p>
-//             Unlock your teaching toolkit — generate quizzes, create lectures, and manage your classroom all in one place.
-//           </p>
-//           <form className="signup-form">
-//             <label>Email Address</label>
-//             <input type="email" placeholder="@example.com" required />
-
-//             <label>Password</label>
-//             <input type="password" required />
-
-
-
-//             <button type="submit" onClick={() => navigate("/dashboard")}>Login</button>
-//             <p className="login-link">
-//               Don't have an account yet?
-//               <Button
-//                 className='signup-link'
-//                 onClick={handleSignupClick}
-//               >
-//                 Sign Up
-//               </Button>
-//             </p>
-//           </form>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// export default Login;
-
-
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import '../styles/Login.css';
 import { Carousel, Button } from 'antd';
+import { ToastContainer, toast } from 'react-toastify';  
+import 'react-toastify/dist/ReactToastify.css';           
 import Teacher7 from '../assets/Teacher7.png';
 import Teacher5 from '../assets/Teacher5.png';
 import Teacher6 from '../assets/Teacher6.png';
@@ -92,7 +14,7 @@ export default function Login() {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);          
 
   const handleSignupClick = () => {
     navigate('/signup');
@@ -100,7 +22,7 @@ export default function Login() {
 
   const handleSubmit = async e => {
     e.preventDefault();
-    setError('');
+    setLoading(true);                                      // start loading
 
     try {
       const resp = await axios.post(
@@ -109,29 +31,31 @@ export default function Login() {
         { headers: { 'Content-Type': 'application/json' } }
       );
 
-      // Example response shape:
-      // { status: "success", message: "...", data: { name, email, token } }
       const { data } = resp.data;
       const { token, name } = data;
 
-      // Save token (and optionally user info) for later API calls
       localStorage.setItem('authToken', token);
       localStorage.setItem('userName', name);
 
-      // Redirect to your dashboard or protected route
-      navigate('/dashboard');
+      toast.success('Login successful! Redirecting...');    // show success toast
+
+      setTimeout(() => navigate('/dashboard'), 1500);       // redirect after toast
     } catch (err) {
       console.error(err);
       if (err.response?.status === 401) {
-        setError('Invalid email or password');
+        toast.error('Invalid email or password');
       } else {
-        setError('Login failed. Please try again.');
+        toast.error('Login failed. Please try again.');
       }
+    } finally {
+      setLoading(false);                                    // stop loading
     }
   };
 
   return (
     <div className="signup-container">
+      <ToastContainer position="top-center" autoClose={3000} /> 
+
       <div className="signup-left">
         <Carousel autoplay effect="fade" className="signup-carousel">
           <div><img src={Teacher7} alt="Teacher 7" className="signup-image" /></div>
@@ -139,6 +63,7 @@ export default function Login() {
           <div><img src={Teacher6} alt="Teacher 6" className="signup-image" /></div>
         </Carousel>
       </div>
+
       <div className="signup-right">
         <div className="form-wrapper">
           <img src={Logo} alt="Teachify Logo" className="logo" />
@@ -147,7 +72,7 @@ export default function Login() {
             Unlock your teaching toolkit — generate quizzes, create lectures, and manage 
             your classroom all in one place.
           </p>
-          {error && <div className="error">{error}</div>}
+
           <form className="signup-form" onSubmit={handleSubmit}>
             <label>Email Address</label>
             <input
@@ -167,7 +92,9 @@ export default function Login() {
               required
             />
 
-            <button type="submit">Login</button>
+            <button type="submit" disabled={loading}>
+              {loading ? 'Logging in...' : 'Login'}
+            </button>
 
             <p className="login-link">
               Don't have an account yet?

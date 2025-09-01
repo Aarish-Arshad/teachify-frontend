@@ -7,7 +7,8 @@ import h1 from "../assets/h1.png";
 import h2 from "../assets/h2.png";
 import h3 from "../assets/h3.png";
 import h4 from "../assets/h4.png";
-// import h5 from "../assets/h5.png";
+import h5 from "../assets/h5.png";
+import h6 from "../assets/h6.png";
 // import h6 from "../assets/h6.png";
 import WCU from "../assets/wcu.png";
 import testimonials from "../assets/testimonials.png";
@@ -22,20 +23,24 @@ const features = [
     text: "Save hours of manual effort by uploading your notes or PDFs — our system analyzes the material and generates clear, well-structured multiple-choice questions tailored to your topic. You can edit, customize, and share them instantly.",
     buttonText: "Generate MCQs",
     reverse: false,
+    image: h4,   
   },
   {
     title: "Need to Reinforce Key Terms? Let Us Fill in the Blanks for You.",
     text: "Make learning interactive by turning your lecture content into fill-in-the-blank questions that focus on essential terms and definitions. It’s a smart way to reinforce memory and check student understanding — no manual formatting needed.",
     buttonText: "Create Blanks",
     reverse: true,
+    image: h5,
   },
   {
     title: "Convert PDFs and Notes into Clear, Structured Lecture Material",
     text: "Just upload your resources — our platform will break them down into easy-to-follow bullet points or outlines. Whether you’re preparing slides or classroom notes, you’ll get polished, ready-to-use lecture material in minutes.",
     buttonText: "Prepare Lecture",
     reverse: false,
+    image: h6,
   },
 ];
+
 
 
 function Home() {
@@ -85,7 +90,7 @@ function Home() {
                       {item.buttonText}
                     </Button>
                   </div>
-                  <img src={h4} className="feature-image"></img>
+                  <img src={item.image} className="feature-image" alt="Feature" />
                 </div>
               ))}
             </div>

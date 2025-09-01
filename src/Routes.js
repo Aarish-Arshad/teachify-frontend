@@ -6,6 +6,7 @@ import Feature1 from './pages/Feature1';
 import Feature2 from './pages/Feature2';
 import Feature3 from './pages/Feature3';
 import Feature4 from './pages/Feature4';
+// import lectureHistory from './pages/lecturesHistory';
 
 function AppRoutes() {
   return (
@@ -17,6 +18,10 @@ function AppRoutes() {
       <Route path="/quiz-generation" element={<Feature2 />} />
       <Route path="/lecture-preparation" element={<Feature3 />} />
       <Route path="/history" element={<Feature4 />} />
+      {/* <Route path="/lectures-history" element={<lectureHistory />} /> */}
+      {/* Add more routes as needed */}
+      
+      {/* Catch-all route for 404 */}
       <Route path="*" element={<div>404 - Page Not Found</div>} />
     </Routes>
   );

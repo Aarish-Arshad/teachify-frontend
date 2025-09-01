@@ -8,8 +8,8 @@ const MainSection = () => {
     <main className="main-content">
       <div className="rounded-section">
         <DashboardHeader/>
-       <UserProfileSection/>
-       <MainContent/>
+        <UserProfileSection/>
+        <MainContent/>
       </div>
     </main>
   );
